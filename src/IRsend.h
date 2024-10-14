@@ -124,6 +124,7 @@ struct state_t {
   bool quiet = false;
   bool turbo = false;
   bool econo = false;
+  bool floor = false;
   bool light = false;
   bool filter = false;
   bool clean = false;

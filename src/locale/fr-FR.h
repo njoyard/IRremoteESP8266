@@ -14,6 +14,7 @@
 #define D_STR_PREVIOUSPOWER D_STR_POWER " " D_STR_PREVIOUS
 #define D_STR_QUIET "Silence"
 #define D_STR_ECONO "Economie"
+#define D_STR_FLOOR "Sol"
 #define D_STR_BEEP "Bip"
 #define D_STR_MOULD "Moule"
 #define D_STR_CLEAN "Nettoyer"

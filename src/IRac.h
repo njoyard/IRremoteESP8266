@@ -520,7 +520,8 @@ void electra(IRElectraAc *ac,
   void toshiba(IRToshibaAC *ac,
                const bool on, const stdAc::opmode_t mode, const float degrees,
                const stdAc::fanspeed_t fan, const stdAc::swingv_t swingv,
-               const bool turbo, const bool econo, const bool filter);
+               const bool turbo, const bool econo, const bool filter,
+               const bool floor);
 #endif  // SEND_TOSHIBA_AC
 #if SEND_TROTEC
   void trotec(IRTrotecESP *ac,

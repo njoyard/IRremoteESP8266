@@ -66,6 +66,9 @@
 #ifndef D_STR_ECONO
 #define D_STR_ECONO "Econo"
 #endif  // D_STR_ECONO
+#ifndef D_STR_FLOOR
+#define D_STR_FLOOR "Floor"
+#endif  // D_STR_FLOOR
 #ifndef D_STR_SWING
 #define D_STR_SWING "Swing"
 #endif  // D_STR_SWING

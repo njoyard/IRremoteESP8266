@@ -76,7 +76,7 @@ union ToshibaProtocol{
     uint8_t          :3;
 
     // Byte[8]
-    // (Checksum for 72 bit messages, Eco/Turbo for long 80 bit messages)
+    // (Checksum for 72 bit messages, Eco/Turbo/Floor for long 80 bit messages)
     uint8_t EcoTurbo :8;
   };
 };
@@ -108,8 +108,9 @@ const uint8_t kToshibaAcFanMin =  1;   //      0b001
 const uint8_t kToshibaAcFanMed =  3;   //      0b011
 const uint8_t kToshibaAcFanMax =  5;   //      0b101
 
-const uint8_t kToshibaAcTurboOn = 1;       //            0b01
-const uint8_t kToshibaAcEconoOn = 3;       //            0b11
+const uint8_t kToshibaAcTurboOn = 1;       //            0b001
+const uint8_t kToshibaAcEconoOn = 3;       //            0b011
+const uint8_t kToshibaAcFloorOn = 6;       //            0b110
 
 // Legacy defines. (Deprecated)
 #define TOSHIBA_AC_AUTO kToshibaAcAuto
@@ -150,6 +151,8 @@ class IRToshibaAC {
   bool getTurbo(void) const;
   void setEcono(const bool on);
   bool getEcono(void) const;
+  void setFloor(const bool on);
+  bool getFloor(void) const;
   void setFilter(const bool on);
   bool getFilter(void) const;
   void setMode(const uint8_t mode);

@@ -100,6 +100,7 @@ extern IRTEXT_CONST_PTR(kFan_OnlyStr);
 extern IRTEXT_CONST_PTR(kFastStr);
 extern IRTEXT_CONST_PTR(kFilterStr);
 extern IRTEXT_CONST_PTR(kFixedStr);
+extern IRTEXT_CONST_PTR(kFloorStr);
 extern IRTEXT_CONST_PTR(kFollowStr);
 extern IRTEXT_CONST_PTR(kFreshStr);
 extern IRTEXT_CONST_PTR(kGe6711ar2853mStr);

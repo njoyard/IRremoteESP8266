@@ -2531,11 +2531,13 @@ void IRac::teco(IRTecoAc *ac,
 /// @param[in] turbo Run the device in turbo/powerful mode.
 /// @param[in] econo Run the device in economical mode.
 /// @param[in] filter Turn on the (Pure/ion/pollen/etc) filter mode.
+/// @param[in] floor Run the device in floor heating mode.
 void IRac::toshiba(IRToshibaAC *ac,
                    const bool on, const stdAc::opmode_t mode,
                    const float degrees, const stdAc::fanspeed_t fan,
                    const stdAc::swingv_t swingv,
-                   const bool turbo, const bool econo, const bool filter) {
+                   const bool turbo, const bool econo, const bool filter,
+                   const bool floor) {
   ac->begin();
   ac->setMode(ac->convertMode(mode));
   ac->setTemp(degrees);
@@ -2547,6 +2549,7 @@ void IRac::toshiba(IRToshibaAC *ac,
   // No Quiet setting available.
   ac->setTurbo(turbo);
   ac->setEcono(econo);
+  ac->setFloor(floor);
   // No Light setting available.
   ac->setFilter(filter);
   // No Clean setting available.
@@ -3565,7 +3568,7 @@ bool IRac::sendAc(const stdAc::state_t desired, const stdAc::state_t *prev) {
     {
       IRToshibaAC ac(_pin, _inverted, _modulation);
       toshiba(&ac, send.power, send.mode, degC, send.fanspeed, send.swingv,
-              send.turbo, send.econo, send.filter);
+              send.turbo, send.econo, send.filter, send.floor);
       break;
     }
 #endif  // SEND_TOSHIBA_AC

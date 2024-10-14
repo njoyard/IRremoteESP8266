@@ -32,6 +32,8 @@ const uint16_t kToshibaAcZeroSpace = 490;
 const uint16_t kToshibaAcMinGap = 4600;    // WH-UB03NJ remote
 const uint16_t kToshibaAcUsualGap = 7400;  // Others
 
+const uint16_t kToshibaAcMarkExcess = 25;
+
 using irutils::addBoolToString;
 using irutils::addFanToString;
 using irutils::addIntToString;
@@ -307,13 +309,13 @@ bool IRToshibaAC::getTurbo(void) const {
 
 /// Set the Turbo (Powerful) setting of the A/C.
 /// @param[in] on true, the setting is on. false, the setting is off.
-/// Note: Turbo mode is mutually exclusive with Economy mode.
+/// Note: Turbo mode is mutually exclusive with Economy and Floor Heating modes.
 void IRToshibaAC::setTurbo(const bool on) {
   if (on) {
     _.EcoTurbo = kToshibaAcTurboOn;
     setStateLength(kToshibaACStateLengthLong);
   } else {
-    if (!getEcono()) setStateLength(kToshibaACStateLength);
+    if (!getEcono() && !getFloor()) setStateLength(kToshibaACStateLength);
   }
 }
 
@@ -327,13 +329,33 @@ bool IRToshibaAC::getEcono(void) const {
 
 /// Set the Economy mode setting of the A/C.
 /// @param[in] on true, the setting is on. false, the setting is off.
-/// Note: Economy mode is mutually exclusive with Turbo mode.
+/// Note: Economy mode is mutually exclusive with Turbo and Floor Heating modes.
 void IRToshibaAC::setEcono(const bool on) {
   if (on) {
     _.EcoTurbo = kToshibaAcEconoOn;
     setStateLength(kToshibaACStateLengthLong);
   } else {
-    if (!getTurbo()) setStateLength(kToshibaACStateLength);
+    if (!getTurbo() && !getFloor()) setStateLength(kToshibaACStateLength);
+  }
+}
+
+/// Get the Floor Heating mode setting of the A/C.
+/// @return true, if the current setting is on. Otherwise, false.
+bool IRToshibaAC::getFloor(void) const {
+  if (getStateLength() == kToshibaACStateLengthLong)
+    return _.EcoTurbo == kToshibaAcFloorOn;
+  return false;
+}
+
+/// Set the Floor Heating mode setting of the A/C.
+/// @param[in] on true, the setting is on. false, the setting is off.
+/// Note: Floor Heating mode is mutually exclusive with Economy and Turbo modes.
+void IRToshibaAC::setFloor(const bool on) {
+  if (on) {
+    _.EcoTurbo = kToshibaAcFloorOn;
+    setStateLength(kToshibaACStateLengthLong);
+  } else {
+    if (!getTurbo() && !getEcono()) setStateLength(kToshibaACStateLength);
   }
 }
 
@@ -461,7 +483,7 @@ stdAc::state_t IRToshibaAC::toCommon(const stdAc::state_t *prev) const {
 /// @return A human readable string.
 String IRToshibaAC::toString(void) const {
   String result = "";
-  result.reserve(95);
+  result.reserve(110);
   result += addTempToString(getTemp(), true, false);
   switch (getStateLength()) {
     case kToshibaACStateLengthShort:
@@ -488,6 +510,7 @@ String IRToshibaAC::toString(void) const {
                                kToshibaAcFanMed);
       result += addBoolToString(getTurbo(), kTurboStr);
       result += addBoolToString(getEcono(), kEconoStr);
+      result += addBoolToString(getFloor(), kFloorStr);
       result += addBoolToString(getFilter(), kFilterStr);
   }
   return result;
@@ -523,7 +546,7 @@ bool IRrecv::decodeToshibaAC(decode_results* results, uint16_t offset,
                     kToshibaAcBitMark, kToshibaAcOneSpace,
                     kToshibaAcBitMark, kToshibaAcZeroSpace,
                     kToshibaAcBitMark, kToshibaAcMinGap, true,
-                    _tolerance, kMarkExcess)) return false;
+                    _tolerance, kToshibaAcMarkExcess)) return false;
   // Compliance
   if (strict) {
     // Check that the checksum of the message is correct.
